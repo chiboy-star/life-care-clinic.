@@ -3,11 +3,12 @@
 import { motion } from "framer-motion";
 import { Mail, Share2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link"; // Added for the CTA links
 
 export default function About() {
   const fadeUp = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   };
 
   const staggerContainer = {
@@ -15,14 +16,42 @@ export default function About() {
     visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
   };
 
+  // Added image paths to our team data
+  const teamMembers = [
+    { 
+      name: "Sarah Jenkins", 
+      role: "Lead Physiotherapist", 
+      desc: "Expert in sports recovery with 10+ years experience.",
+      image: "/about/sarah-jenkins.png" 
+    },
+    { 
+      name: "David Miller", 
+      role: "Senior Physiotherapist", 
+      desc: "Specializes in post-surgical rehab and mobility.",
+      image: "/about/david-miller.png"
+    },
+    { 
+      name: "Dr. Lisa Chen", 
+      role: "Specialist Physiotherapist", 
+      desc: "Clinical specialist in pelvic floor and chronic pain.",
+      image: "/about/lisa-chen.png"
+    }
+  ];
+
   return (
     <>
       {/* Hero Section */}
       <section className="relative h-[50vh] md:h-[60vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0 bg-surface-container-high">
-          {/* Add '/about/clinic-interior.jpg' to your public folder later */}
-          <Image src="/about/clinic-interior.png" alt="Clinic Interior" fill className="object-cover" /> 
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]"></div>
+          <Image 
+            src="/about/clinic-interior.png" 
+            alt="Life Care Clinic Interior showing a clean, modern reception area" 
+            fill 
+            className="object-cover" 
+            priority // Critical for the LCP element
+            sizes="100vw"
+          /> 
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]"></div>
         </div>
         <div className="relative z-10 max-w-container-max mx-auto px-margin-mobile md:px-gutter w-full">
           <motion.div 
@@ -31,10 +60,10 @@ export default function About() {
             transition={{ duration: 0.7 }}
             className="max-w-2xl bg-surface/95 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-xl border border-surface-container"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-4 leading-tight tracking-tight">
               Our Mission: Restoring Your Vitality.
             </h1>
-            <p className="text-lg text-on-surface-variant leading-relaxed">
+            <p className="text-lg md:text-xl text-on-surface-variant leading-relaxed">
               Exceptional physiotherapy care tailored to your journey of healing and movement.
             </p>
           </motion.div>
@@ -56,7 +85,7 @@ export default function About() {
                 <span className="w-12 h-1 bg-primary rounded-full"></span>
                 <span className="font-bold text-sm text-primary uppercase tracking-widest">Our Heritage</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-on-surface mb-6">Clinical Excellence Since 2012</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-on-surface mb-6 tracking-tight">Clinical Excellence Since 2012</h2>
               <div className="space-y-4 text-lg text-on-surface-variant leading-relaxed">
                 <p>Founded on the principles of empathy and vital restoration, Life Care has spent over a decade redefining the patient experience. What started as a small local practice has grown into a beacon of clinical excellence.</p>
                 <p>Our approach combines technical proficiency with an emotionally supportive environment. We believe that true healing happens when patients feel heard, understood, and empowered throughout their recovery journey.</p>
@@ -75,7 +104,13 @@ export default function About() {
             >
               <div className="absolute -top-4 -right-4 w-full h-full border-2 border-secondary/20 rounded-2xl"></div>
               <div className="relative z-10 rounded-2xl shadow-lg w-full aspect-[4/3] bg-surface-container overflow-hidden">
-                 {/* Add '/about/physio-assisting.jpg' to public folder later */}
+                 <Image 
+                   src="/about/physio-assisting.png" 
+                   alt="Physiotherapist gently assisting an older patient with arm mobility exercises" 
+                   fill 
+                   className="object-cover"
+                   sizes="(max-width: 768px) 100vw, 50vw"
+                 />
               </div>
             </motion.div>
           </div>
@@ -83,11 +118,11 @@ export default function About() {
       </section>
 
       {/* Team Section */}
-      <section className="py-stack-lg bg-surface-container-lowest">
+      <section className="py-stack-lg bg-surface-container-lowest border-y border-outline-variant/30">
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-gutter">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-on-surface mb-4">Meet Our Specialist Team</h2>
-            <p className="text-lg text-on-surface-variant max-w-xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-on-surface mb-4 tracking-tight">Meet Our Specialist Team</h2>
+            <p className="text-lg text-on-surface-variant max-w-xl mx-auto leading-relaxed">
               Our practitioners are world-class experts dedicated to your physical well-being and clinical recovery.
             </p>
           </div>
@@ -99,21 +134,34 @@ export default function About() {
             viewport={{ once: true, margin: "-50px" }}
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
-            {[
-              { name: "Sarah Jenkins", role: "Lead Physiotherapist", desc: "Expert in sports recovery with 10+ years experience." },
-              { name: "David Miller", role: "Senior Physiotherapist", desc: "Specializes in post-surgical rehab and mobility." },
-              { name: "Dr. Lisa Chen", role: "Specialist Physiotherapist", desc: "Clinical specialist in pelvic floor and chronic pain." }
-            ].map((member, i) => (
+            {teamMembers.map((member, i) => (
               <motion.div key={i} variants={fadeUp} className="bg-surface p-6 rounded-2xl shadow-sm border border-outline-variant hover:shadow-md transition-shadow group">
                 <div className="mb-6 overflow-hidden rounded-xl aspect-square bg-surface-container relative">
-                   {/* Add team images here later */}
+                   <Image 
+                     src={member.image} 
+                     alt={`Professional portrait of ${member.name}, ${member.role}`} 
+                     fill 
+                     className="object-cover group-hover:scale-105 transition-transform duration-500"
+                     sizes="(max-width: 768px) 100vw, 33vw"
+                   />
                 </div>
                 <h3 className="text-2xl font-bold text-primary mb-1">{member.name}</h3>
                 <p className="font-semibold text-secondary mb-4">{member.role}</p>
-                <p className="text-on-surface-variant">{member.desc}</p>
+                <p className="text-on-surface-variant leading-relaxed">{member.desc}</p>
                 <div className="mt-6 flex gap-4">
-                  <button className="text-outline hover:text-primary transition-colors outline-none focus:ring-2 focus:ring-primary rounded"><Share2 className="w-5 h-5" /></button>
-                  <button className="text-outline hover:text-primary transition-colors outline-none focus:ring-2 focus:ring-primary rounded"><Mail className="w-5 h-5" /></button>
+                  <button 
+                    className="text-outline hover:text-primary transition-colors outline-none focus:ring-2 focus:ring-primary rounded p-1"
+                    aria-label={`Share profile for ${member.name}`}
+                  >
+                    <Share2 className="w-5 h-5" />
+                  </button>
+                  <a 
+                    href={`mailto:hello@lifecarephysio.com?subject=Inquiry regarding ${member.name}`}
+                    className="text-outline hover:text-primary transition-colors outline-none focus:ring-2 focus:ring-primary rounded p-1"
+                    aria-label={`Email ${member.name}`}
+                  >
+                    <Mail className="w-5 h-5" />
+                  </a>
                 </div>
               </motion.div>
             ))}
@@ -128,19 +176,26 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-secondary-container text-on-secondary-container p-10 md:p-16 rounded-[2rem] flex flex-col items-center text-center shadow-inner"
+            className="bg-secondary-container text-on-secondary-container p-10 md:p-16 rounded-[2rem] flex flex-col items-center text-center shadow-inner focus-within:ring-4 focus-within:ring-secondary focus-within:ring-offset-4"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to start your journey?</h2>
-            <p className="text-lg mb-8 max-w-2xl opacity-90">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 tracking-tight">Ready to start your journey?</h2>
+            <p className="text-lg md:text-xl mb-10 max-w-2xl opacity-90 leading-relaxed">
               Book an initial assessment with one of our specialists today and take the first step towards pain-free movement.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <button className="bg-on-secondary-container text-white px-8 py-4 rounded-xl font-bold hover:opacity-90 transition-all shadow-md active:scale-95 focus:ring-2 focus:ring-on-secondary-container focus:ring-offset-2 outline-none">
+              {/* Note: In a real app, "Book Online" might open a modal or go to a booking portal like JaneApp */}
+              <Link 
+                href="/contact" 
+                className="bg-on-secondary-container text-white px-8 py-4 rounded-xl font-bold hover:opacity-90 transition-all shadow-md active:scale-95 focus:ring-2 focus:ring-on-secondary-container focus:ring-offset-2 outline-none"
+              >
                 Book Online
-              </button>
-              <a href="/contact" className="border-2 border-on-secondary-container text-on-secondary-container px-8 py-4 rounded-xl font-bold hover:bg-on-secondary-container hover:text-white transition-all focus:ring-2 focus:ring-on-secondary-container focus:ring-offset-2 outline-none">
+              </Link>
+              <Link 
+                href="/contact" 
+                className="border-2 border-on-secondary-container text-on-secondary-container px-8 py-4 rounded-xl font-bold hover:bg-on-secondary-container hover:text-white transition-all focus:ring-2 focus:ring-on-secondary-container focus:ring-offset-2 outline-none"
+              >
                 Contact Us
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>
